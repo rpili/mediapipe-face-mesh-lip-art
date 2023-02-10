@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Reading Words Aloud</title>
+    <script src="jspsych/jspsych.js"></script>
+    <script src="jspsych/plugin-html-keyboard-response.js"></script>
+    <script src="jspsych/extension-FaceMesh_Interpolate_Horizontal.js"></script>
+    <script src="jspsych/plugin-facemesh-startup.js"></script>
+    <script src="jspsych/plugin-survey.js"></script>
+    <script src="jspsych/plugin-html-audio-response_2.js"></script>
+    <script src="jspsych/plugin-html-audio-response.js"></script>
+    <script src="jspsych/plugin-initialize-microphone.js"></script>
+    <script src="jspsych/camera_utils.js"></script>
+    <script src="jspsych/control_utils.js"></script>
+    <script src="jspsych/drawing_utils.js"></script>
+    <script src="jspsych/face_mesh.js"></script>
+    <link href="jspsych/jspsych.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@0.2.0/css/survey.css">
+  </head>
+
+  <body>
+    </div>
+  </body>
+  </html>
+  <script>
+
+
+   /* initialize jsPsych */
+   var jsPsych = initJsPsych({
+      extensions: [
+    {type: jsPsychExtensionFaceMesh}
+  ],
+     show_progress_bar: true,
+     auto_update_progress_bar: false,
+      on_finish: function(data){
+        jsPsych.data.get().localSave('csv','mydata.csv');}
+    });
+      
+    var n_trials = 258 + 4 
+      
+    /* create timeline */
+    var timeline = [];
+
+    /* welcome message */
+    var welcome = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: "Welcome to the experiment! Click inside this window. Then press any key to begin.",
+        on_start: function(){
+      jsPsych.setProgressBar(0)}};
+    timeline.push(welcome);
+
+    var welcome1_3 = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus:  `
+        <p>Welcome to our reading aloud experiment!</p>
+        <p>As mentioned in SONA, this experiment <strong>does not work on phones!</strong> If necessary, return to the site using a laptop or desktop computer with a webcam.</p>
+        <p> Because this exercise involves recording verbal audio and lip movement, please ensure that you are in
+        a space with minimal background noise, and that you can participate unmasked.</p>
+        <p>This experiment works best if you sit in a well lit room, with your webcam on top of your screen, and avoid touching your face.</p>
+        <p>Normal fidgeting should be fine, but try to avoid large changes of posture. Especially avoid turning your face too far from your webcam.</p>
+        <p>On the next screens, you will turn on your webcam and verify the quality of 
+        face-tracking.</p>
+        <p>Press any key to move forward.</p>
+      `,
+  }
+  timeline.push(welcome1_3)
+
+    var initialize = {
+      type: jsPsychFacemeshStartup,
+      extensions: [
+    {
+      type: jsPsychExtensionFaceMesh, params: {record_data: 0}
+    }
+  ],
+  on_finish:  function(){
+        var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+        jsPsych.setProgressBar(curr_progress_bar_value + (1/n_trials));
+    }
+  };
+    timeline.push(initialize);
+
+    var instructions_1 = {
+      type: jsPsychHtmlKeyboardResponse,
+      extensions: [
+    {
+      type: jsPsychExtensionFaceMesh, params: {record_data: 0}
+    }
+  ],  
+      stimulus: `<p>The feedback widget near the top of the screen will let you know if the tracking system can't see your face.</p>
+        <p>Try ducking out of the way now to test it out.</p>
+        <p>On most trials, your focus should be on the center of your screen, since that's where the test stimuli will appear.</p>
+        <p>However, be sure to glance at the feedback every so often to make sure you haven't drifted out of the camera's frame.</p>
+        <p>Press any key to move forward.</p>
+      `,
+    }
+    timeline.push(instructions_1);
+    
+  var instructions_1_2 = {
+     type: jsPsychHtmlKeyboardResponse,
+      extensions: [
+    {
+      type: jsPsychExtensionFaceMesh, params: {record_data: 0}
+    }
+  ],  
+      stimulus: `<p>Next we'll set up your microphone. The following screen will ask for permission to turn on your mic.</p>
+      <p>After that, you'll be able to record a test clip and listen to it to make sure you are getting clear, loud sound recording.</p>
+      <p>Press any key to move forward.</p>
+      `,
+  };
+  timeline.push(instructions_1_2);
+  
+  var startmic = {
+      type: jsPsychInitializeMicrophone,
+      extensions: [
+    {
+      type: jsPsychExtensionFaceMesh, params: {record_data: 0}
+    }
+    ],
+    };
+
+    timeline.push(startmic);
+    
+    var testaudio = {
+      type: jsPsychHtmlAudioResponse,
+      stimulus: 'Test the microphone by saying "Hello world!" and clicking "Done" when finished.',
+      recording_duration: 10000,
+      allow_playback: true,
+      done_button_label: "Done"
+    };
+
+    timeline.push(testaudio);
+
+     /* instructions */
+     var instructions0 = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+      `<p>Once you begin the experiment, you will proceed through about 15 minutes worth of trials in which you will read words <strong>aloud</strong>.</p> 
+      <p>At the beginning of each trial, you will see the word "Ready?". Start each trial by pressing the spacebar. "Ready?" will be replaced briefly by an "*"" and then by the word to read aloud.</p>
+      <p>Your task is to read this word aloud, <strong>starting your response as soon as possible after the word appears.</strong></p>
+      <p>Words will be grouped into blocks. Before each block, you will see a list of the words to expect. You should read the list aloud before starting the block.</p>
+      <p>Each word that appears in a block will show up multiple times.</p>
+      <div style='width: 700px;'></div>
+      <p>Press any key to move forward.</p>`,
+      on_finish:  function(){
+        var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+        jsPsych.setProgressBar(curr_progress_bar_value + (1/n_trials))}
+    };
+    timeline.push(instructions0);
+    
+    var instructionshalf = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+      `<p>To reiterate, begin each trial using the <strong>space bar</strong>.</p>
+      <p>Begin your <strong>spoken aloud</strong> response <strong>as soon as the word appears.</strong></p>
+      <p>Press any key to move forward.</p>`,
+    }
+    timeline.push(instructionshalf)
+
+    var instructionspract = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+      `<p>We will begin with a short set of practice trials. Press the space bar to move on to the practice session.</p>`,
+    }
+    timeline.push(instructionspract)
+
+
+    var practice = [
+        {stimulus: "deem", context: "practice", vowel: "/i/"},
+        {stimulus: "soon", context: "practice", vowel: "/u/"},
+        {stimulus: "deal", context: "practice", vowel: "/i/"},
+        {stimulus: "rune", context: "practice", vowel: "/u/"},
+        {stimulus: "peek", context: "practice", vowel: "/i/"},
+        {stimulus: "tomb", context: "practice", vowel: "/u/"}
+    ]
+
+    var practice_full = [practice[0],practice[1],practice[2],practice[3],practice[4],practice[5],
+    practice[0],practice[1],practice[2],practice[3],practice[4],practice[5],
+    practice[0],practice[1],practice[2],practice[3],practice[4],practice[5]];
+
+var practice_final = jsPsych.randomization.shuffleNoRepeats(practice_full);
+
+    var practice_preplist = `
+<p>deem</p>
+<p>soon</p>
+<p>deal</p>
+<p>rune</p>
+<p>peek</p>
+<p>tomb</p>
+`
+
+    var hom_i = [
+        {stimulus: "keen", context: "homogeneous", vowel: "/i/"},
+        {stimulus: "geese", context: "homogeneous", vowel: "/i/"},
+        {stimulus: "seed", context: "homogeneous", vowel: "/i/"},
+        {stimulus: "zeal", context: "homogeneous", vowel: "/i/"},
+        {stimulus: "team", context: "homogeneous", vowel: "/i/"},
+        {stimulus: "deep", context: "homogeneous", vowel: "/i/"}
+    ]
+
+    var hom_u = [
+        {stimulus: "coot", context: "homogeneous", vowel: "/u/"},
+        {stimulus: "ghoul", context: "homogeneous", vowel: "/u/"},
+        {stimulus: "soup", context: "homogeneous", vowel: "/u/"},
+        {stimulus: "zoom", context: "homogeneous", vowel: "/u/"},
+        {stimulus: "tooth", context: "homogeneous", vowel: "/u/"},
+        {stimulus: "duke", context: "homogeneous", vowel: "/u/"}
+    ]
+
+    var het_1 = [
+    {stimulus: "coot", context: "heterogeneous", vowel: "/u/"},
+    {stimulus: "geese", context: "heterogeneous", vowel: "/i/"},
+    {stimulus: "soup", context: "heterogeneous", vowel: "/u/"},
+    {stimulus: "zeal", context: "heterogeneous", vowel: "/i/"},
+    {stimulus: "tooth", context: "heterogeneous", vowel: "/u/"},
+    {stimulus: "deep", context: "heterogeneous", vowel: "/i/"}
+    ]
+
+    var het_2 = [
+    {stimulus: "keen", context: "heterogeneous", vowel: "/i/"},
+    {stimulus: "ghoul", context: "heterogeneous", vowel: "/u/"},
+    {stimulus: "seed", context: "heterogeneous", vowel: "/i/"},
+    {stimulus: "zoom", context: "heterogeneous", vowel: "/u/"},
+    {stimulus: "team", context: "heterogeneous", vowel: "/i/"},
+    {stimulus: "duke", context: "heterogeneous", vowel: "/u/"}
+    ]
+    
+var hom_i_preplist = `
+<p>keen</p>
+<p>geese</p>
+<p>seed</p>
+<p>zeal</p>
+<p>team</p>
+<p>deep</p>
+`
+
+var hom_u_preplist = `
+<p>coot</p>
+<p>ghoul</p>
+<p>soup</p>
+<p>zoom</p>
+<p>tooth</p>
+<p>duke</p>
+`
+
+var het_1_preplist = `
+<p>coot</p>
+<p>geese</p>
+<p>soup</p>
+<p>zeal</p>
+<p>tooth</p>
+<p>deep</p>
+`
+
+var het_2_preplist = `
+<p>keen</p>
+<p>ghoul</p>
+<p>seed</p>
+<p>zoom</p>
+<p>team</p>
+<p>duke</p>
+
+`
+
+var block1_stimuli = null
+var block2_stimuli = null
+var block3_stimuli = null
+var block4_stimuli = null
+
+var block_1_preplist = null
+var block_2_preplist = null
+var block_3_preplist = null 
+var block_4_preplist = null
+
+    var context_order = ['homfirst', 'hetfirst']
+    var context_counterbalance = jsPsych.randomization.sampleWithoutReplacement(context_order, 1)[0];
+    var vowel_order = ['ifirst', 'ufirst']
+    var vowel_counterbalance = jsPsych.randomization.sampleWithoutReplacement(vowel_order, 1)[0];
+    var het_order = ['1first', '2first']
+    var het_counterbalance = jsPsych.randomization.sampleWithoutReplacement(het_order, 1)[0];
+
+    if (context_counterbalance == 'homfirst'){
+        if (vowel_counterbalance == 'ifirst'){
+            block1_stimuli = hom_i
+            block2_stimuli = hom_u
+            block_1_preplist = hom_i_preplist
+            block_2_preplist = hom_u_preplist
+        }else{
+            block1_stimuli = hom_u
+            block2_stimuli = hom_i
+            block_1_preplist = hom_u_preplist
+            block_2_preplist = hom_i_preplist
+        }
+        if (het_counterbalance == '1first'){
+            block3_stimuli = het_1
+            block4_stimuli = het_2
+            block_3_preplist = het_1_preplist
+            block_4_preplist = het_2_preplist
+        }else{
+            block3_stimuli = het_2
+            block4_stimuli = het_1
+            block_3_preplist = het_2_preplist
+            block_4_preplist = het_1_preplist
+        }
+    }else{
+        if (vowel_counterbalance == 'ifirst'){
+            block3_stimuli = hom_i
+            block4_stimuli = hom_u
+            block_3_preplist = hom_i_preplist
+            block_4_preplist = hom_u_preplist
+        }else{
+            block3_stimuli = hom_u
+            block4_stimuli = hom_i
+            block_3_preplist = hom_u_preplist
+            block_4_preplist = hom_i_preplist
+        }
+        if (het_counterbalance == '1first'){
+            block1_stimuli = het_1
+            block2_stimuli = het_2
+            block_1_preplist = het_1_preplist
+            block_2_preplist = het_2_preplist
+        }else{
+            block1_stimuli = het_2
+            block2_stimuli = het_1
+            block_1_preplist = het_2_preplist
+            block_2_preplist = het_1_preplist
+        }
+    }
+
+    var part1 = null
+    var part2 = null
+    var part3 = null
+    var counterbal = null
+
+    if (context_counterbalance == 'homfirst'){
+        part1 = 'hom'
+    }else{
+        part1 = 'het'
+    }
+
+    if (vowel_counterbalance == 'ifirst'){
+        part2 = 'i'
+    }else{
+        part2 = 'u'
+    }
+
+    if (het_counterbalance == '1first'){
+        part3 = '1'
+    }else{
+        part3 = '2'
+    }
+
+    counterbal = part1 + '-' + part2 + '-' + part3
+
+
+var block1_full = [block1_stimuli[0],block1_stimuli[1],block1_stimuli[2],block1_stimuli[3],block1_stimuli[4],block1_stimuli[5],
+block1_stimuli[0],block1_stimuli[1],block1_stimuli[2],block1_stimuli[3],block1_stimuli[4],block1_stimuli[5],
+block1_stimuli[0],block1_stimuli[1],block1_stimuli[2],block1_stimuli[3],block1_stimuli[4],block1_stimuli[5],
+block1_stimuli[0],block1_stimuli[1],block1_stimuli[2],block1_stimuli[3],block1_stimuli[4],block1_stimuli[5],
+block1_stimuli[0],block1_stimuli[1],block1_stimuli[2],block1_stimuli[3],block1_stimuli[4],block1_stimuli[5],];
+
+var block1_final = jsPsych.randomization.shuffleNoRepeats(block1_full);
+var block1_final2 = jsPsych.randomization.shuffleNoRepeats(block1_final);
+
+var block2_full = [block2_stimuli[0],block2_stimuli[1],block2_stimuli[2],block2_stimuli[3],block2_stimuli[4],block2_stimuli[5],
+block2_stimuli[0],block2_stimuli[1],block2_stimuli[2],block2_stimuli[3],block2_stimuli[4],block2_stimuli[5],
+block2_stimuli[0],block2_stimuli[1],block2_stimuli[2],block2_stimuli[3],block2_stimuli[4],block2_stimuli[5],
+block2_stimuli[0],block2_stimuli[1],block2_stimuli[2],block2_stimuli[3],block2_stimuli[4],block2_stimuli[5],
+block2_stimuli[0],block2_stimuli[1],block2_stimuli[2],block2_stimuli[3],block2_stimuli[4],block2_stimuli[5],];
+
+var block2_final = jsPsych.randomization.shuffleNoRepeats(block2_full);
+var block2_final2 = jsPsych.randomization.shuffleNoRepeats(block2_final);
+
+var block3_full = [block3_stimuli[0],block3_stimuli[1],block3_stimuli[2],block3_stimuli[3],block3_stimuli[4],block3_stimuli[5],
+block3_stimuli[0],block3_stimuli[1],block3_stimuli[2],block3_stimuli[3],block3_stimuli[4],block3_stimuli[5],
+block3_stimuli[0],block3_stimuli[1],block3_stimuli[2],block3_stimuli[3],block3_stimuli[4],block3_stimuli[5],
+block3_stimuli[0],block3_stimuli[1],block3_stimuli[2],block3_stimuli[3],block3_stimuli[4],block3_stimuli[5],
+block3_stimuli[0],block3_stimuli[1],block3_stimuli[2],block3_stimuli[3],block3_stimuli[4],block3_stimuli[5],];
+
+var block3_final = jsPsych.randomization.shuffleNoRepeats(block3_full);
+var block3_final2 = jsPsych.randomization.shuffleNoRepeats(block3_final);
+
+var block4_full = [block4_stimuli[0],block4_stimuli[1],block4_stimuli[2],block4_stimuli[3],block4_stimuli[4],block4_stimuli[5],
+block4_stimuli[0],block4_stimuli[1],block4_stimuli[2],block4_stimuli[3],block4_stimuli[4],block4_stimuli[5],
+block4_stimuli[0],block4_stimuli[1],block4_stimuli[2],block4_stimuli[3],block4_stimuli[4],block4_stimuli[5],
+block4_stimuli[0],block4_stimuli[1],block4_stimuli[2],block4_stimuli[3],block4_stimuli[4],block4_stimuli[5],
+block4_stimuli[0],block4_stimuli[1],block4_stimuli[2],block4_stimuli[3],block4_stimuli[4],block4_stimuli[5],];
+
+var block4_final = jsPsych.randomization.shuffleNoRepeats(block4_full);
+var block4_final2 = jsPsych.randomization.shuffleNoRepeats(block4_final);
+
+
+    var ready = {
+        type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<p style="font-size:30px;">Ready?</p>'
+    }
+
+
+
+    var stimulus = {
+      type: jsPsychHtmlAudioResponse2,
+      extensions: [
+    {
+      type: jsPsychExtensionFaceMesh, params: {record_data: 1}
+    }
+  ],  
+      stimulus: ' ',
+      stimulus_duration: 50,
+      stimulus_2: '<p style="font-size:30px;">*</p>',
+      stimulus_duration_2: 300,
+      stimulus_3: function() {
+        var stim = '<p style="font-size:30px;">'+jsPsych.timelineVariable('stimulus')+'</p>';
+        return stim;
+    },
+      stimulus_duration_3: 700,
+      recording_duration: 1600,
+      data: function(){
+        return {counterbalance: counterbal,
+                target: jsPsych.timelineVariable('stimulus'),
+                context: jsPsych.timelineVariable('context'),
+                vowel: jsPsych.timelineVariable('vowel'),
+        }
+      },
+      on_finish:  function(){
+        var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+        jsPsych.setProgressBar(curr_progress_bar_value + (1/n_trials))
+      }
+    };
+
+    var practice_prep = {
+    type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+     `<p>The following words will appear in the practice block of the experiment. Please <strong>read each aloud once before proceeding.</strong></p>
+     <p> </p>
+     <p>${practice_preplist}</p>
+     <p> </p>
+     <p>Press the space bar to move forward.</p>
+     `,
+          
+    };
+    timeline.push(practice_prep)
+
+    var procedure_practice = {
+      timeline: [ready, stimulus],
+      timeline_variables: practice_final,
+      repetitions: 0,
+      randomize_order: false
+    };
+    timeline.push(procedure_practice);
+
+    var practice_over = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus:
+     `<p>The practice block is over. Press the space bar to move on to the test trials.</p>
+     `,
+          
+    }
+    timeline.push(practice_over)
+
+    var start_test = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus:
+     `<p>You are now beginning the testing phase. You will proceed through four experimental blocks, then take a short break, then perform the four experimental blocks a second time.</p>
+     <p>To remind you, your goal is always to <strong>start your spoken response as soon as possible after the word appears.</strong></p>
+     `,
+          
+    }
+    timeline.push(start_test)
+
+    var block_1_prep = {
+    type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+     `<p>The following words will appear in this block of the experiment. Please <strong>read each aloud once before proceeding.</strong></p>
+     <p> </p>
+     <p>${block_1_preplist}</p>
+     <p> </p>
+     <p>Press the space bar to move forward.</p>
+     `,
+          
+    };
+    timeline.push(block_1_prep)
+
+    var procedure1 = {
+      timeline: [ready, stimulus],
+      timeline_variables: block1_final,
+      repetitions: 0,
+      randomize_order: false
+    };
+    timeline.push(procedure1);
+
+    var block_1_over = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus:
+     `<p>The preceding block is over. Press the space bar to move on to the next block.</p>
+     `,
+          
+    }
+    timeline.push(block_1_over)
+
+    var block_2_prep = {
+    type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+     `<p>The following words will appear in this block of the experiment. Please <strong>read each aloud once before proceeding.</strong></p>
+     <p> </p>
+     <p>${block_2_preplist}</p>
+     <p> </p>
+     <p>Press the space bar to move forward.</p>
+     `,
+          
+    };
+    timeline.push(block_2_prep)
+
+    var procedure2 = {
+      timeline: [ready, stimulus],
+      timeline_variables: block2_final,
+      repetitions: 0,
+      randomize_order: false
+    };
+    timeline.push(procedure2);
+
+    var block_2_over = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus:
+     `<p>The preceding block is over. Press the space bar to move on to the next block.</p>
+     `,
+          
+    }
+    timeline.push(block_2_over)
+
+    var block_3_prep = {
+    type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+     `<p>The following words will appear in this block of the experiment. Please <strong>read each aloud once before proceeding.</strong></p>
+     <p> </p>
+     <p>${block_3_preplist}</p>
+     <p> </p>
+     <p>Press the space bar to move forward.</p>
+     `,
+          
+    };
+    timeline.push(block_3_prep)
+
+    var procedure3 = {
+      timeline: [ready, stimulus],
+      timeline_variables: block3_final,
+      repetitions: 0,
+      randomize_order: false
+    };
+    timeline.push(procedure3);
+
+    var block_3_over = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus:
+     `<p>The preceding block is over. Press the space bar to move on to the next block.</p>
+     `,
+          
+    }
+    timeline.push(block_3_over)
+
+    var block_4_prep = {
+    type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+     `<p>The following words will appear in this block of the experiment. Please <strong>read each aloud once before proceeding.</strong></p>
+     <p> </p>
+     <p>${block_4_preplist}</p>
+     <p> </p>
+     <p>Press the space bar to move forward.</p>
+     `,
+          
+    };
+    timeline.push(block_4_prep)
+
+    var procedure4 = {
+      timeline: [ready, stimulus],
+      timeline_variables: block4_final,
+      repetitions: 0,
+      randomize_order: false
+    };
+    timeline.push(procedure4);
+
+    var block_4_over = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus:
+     `<p>The preceding block is over. Press the space bar to move on to the next block.</p>
+     `,
+          
+    }
+    timeline.push(block_4_over)
+
+    var halfway = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus:
+     `<p>You are halfway through the experiment! Rest your brain for thirty seconds or so, and then you will complete the four testing blocks a second (and final) time.</p>
+     `,
+     on_finish:  function(){
+        var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+        jsPsych.setProgressBar(curr_progress_bar_value + (1/n_trials))}
+    };
+    timeline.push(halfway)
+
+    var block_5_prep = {
+    type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+     `<p>The following words will appear in this block of the experiment. Please <strong>read each aloud once before proceeding.</strong></p>
+     <p> </p>
+     <p>${block_1_preplist}</p>
+     <p> </p>
+     <p>Press the space bar to move forward.</p>
+     `,
+          
+    };
+    timeline.push(block_5_prep)
+
+    var procedure5 = {
+      timeline: [ready, stimulus],
+      timeline_variables: block1_final2,
+      repetitions: 0,
+      randomize_order: false
+    };
+    timeline.push(procedure5);
+
+    var block_5_over = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus:
+     `<p>The preceding block is over. Press the space bar to move on to the next block.</p>
+     `,
+          
+    }
+    timeline.push(block_5_over)
+
+    var block_6_prep = {
+    type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+     `<p>The following words will appear in this block of the experiment. Please <strong>read each aloud once before proceeding.</strong></p>
+     <p> </p>
+     <p>${block_2_preplist}</p>
+     <p> </p>
+     <p>Press the space bar to move forward.</p>
+     `,
+          
+    };
+    timeline.push(block_6_prep)
+
+    var procedure6 = {
+      timeline: [ready, stimulus],
+      timeline_variables: block2_final2,
+      repetitions: 0,
+      randomize_order: false
+    };
+    timeline.push(procedure6);
+
+    var block_6_over = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus:
+     `<p>The preceding block is over. Press the space bar to move on to the next block.</p>
+     `,
+          
+    }
+    timeline.push(block_6_over)
+
+    var block_7_prep = {
+    type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+     `<p>The following words will appear in this block of the experiment. Please <strong>read each aloud once before proceeding.</strong></p>
+     <p> </p>
+     <p>${block_3_preplist}</p>
+     <p> </p>
+     <p>Press the space bar to move forward.</p>
+     `,
+          
+    };
+    timeline.push(block_7_prep)
+
+    var procedure7 = {
+      timeline: [ready, stimulus],
+      timeline_variables: block3_final2,
+      repetitions: 0,
+      randomize_order: false
+    };
+    timeline.push(procedure7);
+
+    var block_7_over = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus:
+     `<p>The preceding block is over. Press the space bar to move on to the next block.</p>
+     `,
+          
+    }
+    timeline.push(block_7_over)
+
+    var block_8_prep = {
+    type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+     `<p>The following words will appear in this block of the experiment. Please <strong>read each aloud once before proceeding.</strong></p>
+     <p> </p>
+     <p>${block_4_preplist}</p>
+     <p> </p>
+     <p>Press the space bar to move forward.</p>
+     `,
+          
+    };
+    timeline.push(block_8_prep)
+
+    var procedure8 = {
+      timeline: [ready, stimulus],
+      timeline_variables: block4_final2,
+      repetitions: 0,
+      randomize_order: false
+    };
+    timeline.push(procedure8);
+
+    var block_8_over = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus:
+     `<p>The preceding block is over. Press the space bar to move forward to debriefing.</p>
+     `,
+          
+    }
+    timeline.push(block_8_over)
+
+
+    var debrief = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus:
+      `<p>Press any key to move on to a brief follow-up questionnaire. You MUST complete this portion
+      for your data to be saved, and for your credit to be properly logged in the system!!!</p>
+      `
+    };
+    timeline.push(debrief);
+
+    var questions = {
+  type: jsPsychSurvey,
+  pages: [
+    [
+      {
+        type: 'html',
+        prompt: 'Please answer the following questions. Required questions are marked with "*" When finished, click "Continue" Your credit will not be logged until you finish on the NEXT SCREEN!',
+      },
+      {
+        type: 'multi-choice',
+        prompt: "Were you able to tell or suspect what the goal of the study was?", 
+        name: 'ParticipantBias', 
+        options: ['Yes', 'No'], 
+        required: true
+      }, 
+      {
+        type: 'text',
+        prompt: "If your answer to the prior question was 'Yes,' what did you notice?",
+        name:'ResearchQuestionAwareness',
+        required: false
+      },
+       {
+        type: 'multi-choice',
+        prompt: "Did you notice anything about how the words were grouped into testing blocks?", 
+        name: 'ParticipantPatience', 
+        options: ['Yes', 'No'], 
+        required: true
+      }, 
+      {
+        type: 'text',
+        prompt: "If your answer to the prior question was 'Yes,' what did you notice?",
+        name:'PrimeAwareness',
+        required: false
+      },
+      {
+        type: 'multi-choice',
+        prompt: "Were you consciously aware of what your body was doing while you waited for the word?", 
+        name: 'ParticipantBodyAware', 
+        options: ['Yes', 'No'], 
+        required: true
+      }, 
+      {
+        type: 'text',
+        prompt: "If your answer to the prior question was 'Yes,' in what way?",
+        name:'BodyAwarenessExplanation',
+        required: false
+      },
+      {
+        type: 'multi-choice',
+        prompt: "Did you experience interruptions or irregularities of wifi/internet service during the experiment?", 
+        name: 'InternetInterruption', 
+        options: ['Yes', 'No'], 
+        required: true
+      }, 
+      {
+        type: 'multi-choice',
+        prompt: "Is English your first language?", 
+        name: 'EngFirst', 
+        options: ['Yes', 'No'], 
+        required: true
+      },
+      {
+        type: 'text',
+        prompt: "Do you speak/read any languages other than English? If so, please say which language(s).", 
+        name: 'Multilingual', 
+        required: true,
+      },
+      {
+        type: 'text',
+        prompt: "What is your age, in years?", 
+        name: 'Age', 
+        required: false
+      },
+      {
+        type: 'multi-choice',
+        prompt: "What is your gender?", 
+        name: 'GenDemo', 
+        options: ['Female', 'Male','Non-binary / third gender','Prefer not to say'], 
+        required: false
+      },
+      {
+        type: 'multi-select',
+        prompt: "What is your race/ethnicity (Select ALL that apply)?", 
+        name: 'EthDemo', 
+        options: ['Asian', 'Black','Caucasian','Latinx','Native American','Pacific Islander','Other','Prefer not to say'], 
+        required: false
+      }
+    ],
+    [
+      {
+        type: 'html',
+        prompt: `<p>Thank you for participating in this study. <strong>Once you click "Submit,"</strong>your participation will be complete and credit logged.</p>
+          <p>You may have noticed that all words had a middle vowel that was either an "ee" sound or an "oo" sound.</p>
+          <p>Prior work from our lab has shown that when participants read a block of all "oo" sounds, they start to anticipate each trial with slightly rounded lips,
+            even before the word appears on the screen. That prior work was done using a different method of tracking lip movements, and all participants did the experiment in-person in the lab.</p>
+            <p>The goal of this study was to determine if that result could be replicated with a new batch of participants, using a new lip-tracking system running over the web.</p>
+            <p>Thank you for your participation. Your data are anonymous. As mentioned in the informed consent, your verbal audio will be kept private. At no point have images of your face been saved; only numeric data about lip roundness has been kept.</p>
+            <p>We kindly ask that you refrain from discussing the details of this study with other participants in the pool.</p>
+`,
+      }
+    ]
+  ],
+  title: 'Reading Words Aloud Posttest Questionnaire',
+  button_label_next: 'Continue',
+  button_label_back: 'Previous',
+  button_label_finish: 'Submit',
+  show_question_numbers: 'onPage',
+  on_finish:  function(){
+        var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+        jsPsych.setProgressBar(curr_progress_bar_value + (1/n_trials))
+      }
+};
+timeline.push(questions);
+    
+    /* experiment start */
+    jsPsych.run(timeline);
+
+    </script>
+  </html>
