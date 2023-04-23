@@ -6,10 +6,10 @@ A word reading task paradigm built in jsPsych with lip articulation tracking thr
 
 ## Contents
 
-This repository contains all files required for running the word reading task experiment, `VowelPrime.html`.
+This repository contains all files required for running the word reading task, `VowelPrime.html`.
 
 `VowelPrime.html`: jsPsych-based experiment protocol for a word reading task with trials organized into blocks to manipulate the priming of the vowel within monosyllable words.  
-`jspsych\`: The entire base [jsPsych 7.2.3](https://github.com/jspsych/jsPsych/releases) installation for local hosting. Includes new plugins and extension for mediapipe FaceMesh lip articulation tracking. 
+`jspsych\`: The entire base [jsPsych 7.2.3](https://github.com/jspsych/jsPsych/releases) installation for local hosting. Includes novel plugins and extension for mediapipe FaceMesh lip articulation tracking. 
 
 ## Installation
 
