@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lip-Tracking Extension Validation Experiment 1</title>
+    <script src="jspsych.js"></script>
+    <script src="plugin-html-keyboard-response.js"></script>
+    <script src="plugin-html-audio-response.js"></script>
+    <script src="plugin-initialize-microphone.js"></script>
+    <script src="extension-lip-separations-via-facemesh.js"></script>
+    <script src="plugin-lip-separations-startup.js"></script>
+    <script src="camera_utils.js"></script>
+    <script src="control_utils.js"></script>
+    <script src="drawing_utils.js"></script>
+    <script src="face_mesh.js"></script>
+    <script src="plugin-survey.js"></script>
+    <link href="jspsych/jspsych.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  </div>
+</body>
+</html>
+<script>
+
+//Use this jsPsych experiment control script to replicate Validation Experiment 1 reported in Krause, Pili, Fernandez, & Hunt (Submitted).
+//If using Cognition.run, include only the JavaScript portion as source code, but verify that any supplementary scripts not included as part of 
+//the jsPsych standard library are attached to your Task.
+
+//The jsPsych initialization function below includes a function to save data to the local computer as a .csv file. This is handy for testing the script on a local machine. However, 
+//it should be removed if running the experiment online. If using your own server, you will need to write php syntax to save the data. If using Cognition.run, 
+//the data will save to your Task automatically.
+
+var jsPsych = initJsPsych({
+  show_progress_bar: true,
+  auto_update_progress_bar: false,
+  extensions: [
+    {type: jsPsychExtensionLipSeparationsFaceMesh}
+  ],
+  on_finish: function() {
+    jsPsych.data.get().localSave('csv','mydata.csv');
+    }
+});
+
+
+var trial_dur = 800
+
+var sprint_repetitions = 10
+
+var n_trials = 2 + (12*sprint_repetitions)
+var timeline = [];
+
+    var welcome1_2 = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: `<p>Welcome to the experiment. Press any key to begin.</p>`,
+    on_start: function(){
+      jsPsych.setProgressBar(0);
+    }
+  }
+  timeline.push(welcome1_2)
+
+  var welcome1_3 = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus:  `
+       <p>This is a proof-of-concept of lip tracking via FaceMesh taking place
+        inside a jsPsych environment. </p>
+        <p>This experiment works best if you sit in a well lit room, with your webcam on top of your screen, and avoid touching your face.</p>
+        <p>Normal fidgeting should be fine, but try to avoid large changes of posture. Especially avoid turning your face too far from your webcam.</p>
+        <p>On the next screens, you will turn on your webcam and verify the quality of 
+        face-tracking.</p>
+        <p>Press any key to move forward.</p>
+      `,
+  }
+  timeline.push(welcome1_3)
+
+  var initialize = {
+      type: jsPsychLipSeparationsFacemeshStartup,
+      extensions: [
+    {
+      type: jsPsychExtensionLipSeparationsFaceMesh, params: {record_data: 0}
+    }
+  ],
+  on_finish:  function(){
+        var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+        jsPsych.setProgressBar(curr_progress_bar_value + (1/n_trials));
+    }
+  }
+    timeline.push(initialize);
+
+
+  var instructions_1 = {
+      type: jsPsychHtmlKeyboardResponse,
+      extensions: [
+    {
+      type: jsPsychExtensionLipSeparationsFaceMesh, params: {record_data: 0}
+    }
+  ],  
+      stimulus: `<p>The feedback widget near the top of the screen will let you know if the tracking system can't see your face.</p>
+        <p>Try ducking out of the way now to test it out.</p>
+        <p>On most trials, your focus should be on the center of your screen, since that's where the test stimuli will appear.</p>
+        <p>However, be sure to glance at the feedback every so often to make sure you haven't drifted out of the camera's frame.</p>
+      `,
+    }
+    timeline.push(instructions_1);
+
+  var instructions_2 = {
+      type: jsPsychHtmlKeyboardResponse,
+      extensions: [
+    {
+      type: jsPsychExtensionLipSeparationsFaceMesh, params: {record_data: 0}
+    }
+  ],  
+      stimulus: `<p>On the following screens you will begin a series of delayed word-reading trials.</p>
+        <p>On each trial you will see one of two familiar names, either "Emma" or "Bob." These will always alternate.</p>
+        <p>Don't start reading right away! The name will be flanked by a countdown to the moment at which you should speak.</p>
+        <p>The countdown starts at '3', and ends at '*'. As SOON as the '*' appears to either side of the name, speak it quickly.</p>
+        <p>Use the countdown to help you ANTICIPATE the '*s'. Your goal is to synchronize the moment you say the name with the moment it is flanked by '*s'.</p>
+      `,
+    }
+    timeline.push(instructions_2);
+
+    var instructions_3 = {
+      type: jsPsychHtmlKeyboardResponse,
+      extensions: [
+    {
+      type: jsPsychExtensionLipSeparationsFaceMesh, params: {record_data: 0}
+    }
+  ],  
+      stimulus: `<p>The schematic below shows how a trial happens over time. In this example, the name is "Emma." You want to synchronize the beginning of your speech to the moment shown with the arrowhead.</p>
+        <p>|      3  Emma  3</p>
+        <p>|      2  Emma  2</p>
+        <p>|      1  Emma  1</p>
+        <p>V      *  Emma  *</p>
+      `,
+      on_finish:  function(){
+        var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+        jsPsych.setProgressBar(curr_progress_bar_value + (1/n_trials))}
+    }
+    timeline.push(instructions_3);
+
+  
+    var welcome2 = {
+    type: jsPsychHtmlKeyboardResponse,
+    extensions: [
+    {
+      type: jjsPsychExtensionLipSeparationsFaceMesh, params: {record_data: 0}
+    }
+  ],  
+    stimulus: `<p>You are about to go through the practice trials. These will help you get the rhythm of the task.</p>
+                <p>Remember, as soon as the flanking asterisks appear, say the name quickly.</p>`,
+  }
+  timeline.push(welcome2)
+
+    var test_stimuli = [
+      {wait1: ' 3  Bob  3 ', wait2: '2  Bob  2', wait3: '1  Bob  1', stimulus: '*  Bob  *'},
+      {wait1: '3  Emma  3', wait2: '2  Emma  2', wait3: '1  Emma  1', stimulus: '*  Emma  *'}
+  ];
+
+
+var wait_1 = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: function(){
+    var stim = jsPsych.timelineVariable('wait1');
+    return stim;
+  },
+  extensions: [
+    {
+      type: jsPsychExtensionLipSeparationsFaceMesh, params: {record_data: 0}
+    }
+  ],
+  choices: "NO_KEYS",
+  trial_duration: trial_dur
+};
+
+var wait_2 = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: function(){
+    var stim = jsPsych.timelineVariable('wait2');
+    return stim;
+  },
+  extensions: [
+    {
+      type: jsPsychExtensionLipSeparationsFaceMesh, params: {record_data: 0}
+    }
+  ],
+  choices: "NO_KEYS",
+  trial_duration: trial_dur
+};
+
+var wait_3 = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: function(){
+    var stim = jsPsych.timelineVariable('wait3');
+    return stim;
+  },
+  extensions: [
+    {
+      type: jsPsychExtensionLipSeparationsFaceMesh, params: {record_data: 0}
+    }
+  ],
+  choices: "NO_KEYS",
+  trial_duration: trial_dur
+};
+
+    var test_trial = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: function() {
+        var stim = jsPsych.timelineVariable('stimulus');
+        return stim;
+    },
+    extensions: [
+    {
+      type: jsPsychExtensionLipSeparationsFaceMesh
+    }
+  ],
+      choices: "NO_KEYS",
+      trial_duration: trial_dur,
+      post_trial_gap: 250,
+      on_finish:  function(){
+        var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+        jsPsych.setProgressBar(curr_progress_bar_value + (1/n_trials))
+      }
+    }
+
+     
+
+    var practice_series = {
+      timeline: [wait_1, wait_2, wait_3, test_trial],
+      timeline_variables: test_stimuli,
+      randomize_order: false,
+      repetitions: sprint_repetitions
+    }
+    timeline.push(practice_series)
+
+    var experiment_lead_in = {
+      type: jsPsychHtmlKeyboardResponse,
+    extensions: [
+    {
+      type: jsPsychExtensionLipSeparationsFaceMesh, params: {record_data: 0}
+    }
+  ],  
+    stimulus: `<p>Now you will complete the real experiment. This will consist of 5 sprints of 10 trials. Between each print you may rest.</p>
+                <p>You should expect this part to take 8-10 minutes total.</p>`,
+
+    }
+    timeline.push(experiment_lead_in)
+
+    var Ready1 = {
+      type: jsPsychHtmlKeyboardResponse,
+    extensions: [
+    {
+      type: jsPsychExtensionLipSeparationsFaceMesh, params: {record_data: 0}
+    }
+  ],  
+    stimulus: `Press any key to begin the next sprint of 10 trials (Sprint 1/5).`,
+
+    }
+    timeline.push(Ready1)
+
+    var Sprint1 = {
+      timeline: [wait_1, wait_2, wait_3, test_trial],
+      timeline_variables: test_stimuli,
+      randomize_order: false,
+      repetitions: sprint_repetitions
+    }
+    timeline.push(Sprint1)
+
+    var Ready2 = {
+      type: jsPsychHtmlKeyboardResponse,
+    extensions: [
+    {
+      type: jsPsychExtensionLipSeparationsFaceMesh, params: {record_data: 0}
+    }
+  ],  
+    stimulus: `Press any key to begin the next sprint of 10 trials (Sprint 2/5).`,
+
+    }
+    timeline.push(Ready2)
+
+    var Sprint2 = {
+      timeline: [wait_1, wait_2, wait_3, test_trial],
+      timeline_variables: test_stimuli,
+      randomize_order: false,
+      repetitions: sprint_repetitions
+    }
+    timeline.push(Sprint2)
+
+    var Ready3 = {
+      type: jsPsychHtmlKeyboardResponse,
+    extensions: [
+    {
+      type: jsPsychExtensionLipSeparationsFaceMesh, params: {record_data: 0}
+    }
+  ],  
+    stimulus: `Press any key to begin the next sprint of 10 trials (Sprint 3/5).`,
+
+    }
+    timeline.push(Ready3)
+
+    var Sprint3 = {
+      timeline: [wait_1, wait_2, wait_3, test_trial],
+      timeline_variables: test_stimuli,
+      randomize_order: false,
+      repetitions: sprint_repetitions
+    }
+    timeline.push(Sprint3)
+
+    var Ready4 = {
+      type: jsPsychHtmlKeyboardResponse,
+    extensions: [
+    {
+      type: jsPsychExtensionLipSeparationsFaceMesh, params: {record_data: 0}
+    }
+  ],  
+    stimulus: `Press any key to begin the next sprint of 10 trials (Sprint 4/5).`,
+
+    }
+    timeline.push(Ready4)
+
+    var Sprint4 = {
+      timeline: [wait_1, wait_2, wait_3, test_trial],
+      timeline_variables: test_stimuli,
+      randomize_order: false,
+      repetitions: sprint_repetitions
+    }
+    timeline.push(Sprint4)
+
+    var Ready5 = {
+      type: jsPsychHtmlKeyboardResponse,
+    extensions: [
+    {
+      type: jsPsychExtensionLipSeparationsFaceMesh, params: {record_data: 0}
+    }
+  ],  
+    stimulus: `Press any key to begin the next sprint of 10 trials (Sprint 5/5).`,
+
+    }
+    timeline.push(Ready5)
+
+    var Sprint5 = {
+      timeline: [wait_1, wait_2, wait_3, test_trial],
+      timeline_variables: test_stimuli,
+      randomize_order: false,
+      repetitions: sprint_repetitions
+    }
+    timeline.push(Sprint5)
+
+
+    var debrief = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: `
+       <p>Thanks for participating. The experiment is over. Pressing any key on your keyboard will show you your results, which have also been saved to the server.</p>
+        `,
+    };
+    timeline.push(debrief);
+
+    jsPsych.run(timeline);
+
+  </script>
+</html>
