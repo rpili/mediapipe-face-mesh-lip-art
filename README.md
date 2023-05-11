@@ -2,7 +2,7 @@
 
 ## Description
 
-A word reading task paradigm built in jsPsych with lip articulation tracking through mediapipe FaceMesh. The purpose is to allow researchers to quickly deploy word reading tasks online and collect auditory and articulatory measures. 
+A word reading task paradigm built in jsPsych with lip articulation tracking through MediaPipe's FaceMesh. The purpose of this repository is to allow researchers to quickly deploy word reading tasks online and collect auditory and articulatory measures. 
 
 ## Contents
 
