@@ -22,6 +22,28 @@ Clone this repository
 
 ## Usage
 
+To execute a study using our custom FaceMesh extension (and its associated startup plugin) a researcher will require the following:
+- A recent distribution of the jsPsych script library.
+	- This is freely downloadable from https://www.jspsych.org/. 	
+	- The base jsPsych 7.2.3 installation is also available in `jspsych/`.
+- Our custom FaceMesh lip-tracking extension.
+	- `extension-lip-separations-via-facemesh.js`
+- Our custom startup plugin, which is recommended but not required. 
+	- `plugin-lip-separations-startup.js`
+- The following core FaceMesh scripts:
+	- `camera_utils.js`
+	- `control_utils.js`
+	- `drawing_utils.js`
+	- `face_mesh.js`
+	- The above scripts are part of the MediaPipe project, https://google.github.io/mediapipe/.
+-	One or more study control scripts specific to the study, written in JavaScript, using the custom syntax for jsPsych’s features.
+	- `scripts/Validation_Experiment_jsPsych_Scripts` contains ready-to-use word reading experiments. 
+-	If recording of the participant’s verbal audio is desired, a jsPsych-compatible plugin or extension to accomplish this. Two candidates are:
+	-	`plugin-html-audio-response.js`, as included in the standard jsPsych library.
+	-	`plugin-html-audio-response_2.js`, our modification of the standard audio plugin.
+-	If the study is going to be conducted over the web, a web-hosting service to which all the required JavaScript files can be posted, and to which data outputs can be saved for each run.
+-	Possibly, a means of taking the raw jsPsych data, which will likely download as a single, quite complicated .csv file, and parsing it into a usable form, such as by using Python scripts.
+
 ## Credits
 
 ## License
