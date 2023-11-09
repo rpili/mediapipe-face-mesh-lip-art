@@ -30,7 +30,7 @@ To execute a study using our custom FaceMesh extension (and its associated start
 	- `extension-lip-separations-via-facemesh.js`
 - Our custom startup plugin, which is recommended but not required. 
 	- `plugin-lip-separations-startup.js`
-- The following core FaceMesh scripts:
+- The following core FaceMesh scripts, in `scripts/FaceMesh_Core_Scripts`:
 	- `camera_utils.js`
 	- `control_utils.js`
 	- `drawing_utils.js`
@@ -43,6 +43,7 @@ To execute a study using our custom FaceMesh extension (and its associated start
 	-	`plugin-html-audio-response_2.js`, our modification of the standard audio plugin.
 -	If the study is going to be conducted over the web, a web-hosting service to which all the required JavaScript files can be posted, and to which data outputs can be saved for each run.
 -	Possibly, a means of taking the raw jsPsych data, which will likely download as a single, quite complicated .csv file, and parsing it into a usable form, such as by using Python scripts.
+	- `scripts/Validation_Experiment_Data_Parsing_Python_Scripts` contains Python scripts for parsing raw jsPsych data from the included ready-to-use word reading experiments.
 
 ## Credits
 
